@@ -1,27 +1,19 @@
 # Anony Msg [In-Development]
 
+
+
 ## Overview
 
-My first ever [Next.js](https://nextjs.org) (Full-Stack) which allows users to message another user anonymously, i.e without revealing their identity.
+My first ever Next.js Full-Stack production-grade app which allows users to send a message (or a feedback) to another user anonymously, i.e without revealing their identity.
 
-## Setup Locally
+Thanks a lot to my mentor [Sir. Hitesh Choudhary](https://github.com/hiteshchoudhary) for teaching the "industry-standard" way of building modern production-grade full-stack applications using Next.js, like **AnonyMsg** that too for *Free* in such an amazing, efficient, fun & super-commendable way.
 
-This is a project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app). And here are the steps to run it locally:
+If you wanna learn not only Next.js in a *sweet and beautiful* way, but also the *industry-standard* way to build production-grade apps using it, then don't forget to check out [His course](https://youtube.com/playlist?list=PLu71SKxNbfoBAaWGtn9GA2PTw0HO0tXzq&si=MDXDrThRp7V2SonC) on His official [Chai aur Code](https://www.youtube.com/@chaiaurcode) YT Channel. Yup, that's exactly from where I've learnt & upskilled myself in Software Development Engineering! 😉😌🫡🌟
 
-1. First, run the development server:
 
-    ```bash
-    npm run dev
-    # or
-    yarn dev
-    # or
-    pnpm dev
-    # or
-    bun dev
-    ```
 
-2. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Learnings
 
-3. You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Here are my valuable learnings throughout my development journey of **AnonyMsg**:
 
-**NOTE:** This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1.
