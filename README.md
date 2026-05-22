@@ -36,4 +36,4 @@ Here are my valuable learnings throughout my development journey of **AnonyMsg**
 
 7. Using [React-Email](https://react.email/) to create Email templates as react-components, especially to send "Verification Code" or OTP to the user's email for verification.
 
-8. 
+8. Using [Resend](https://resend.com/)(one of the most popular library and top-choice library among Devs) for sending Emails to the users, especially for verification of users' emails in **AnonyMsg** platform.
