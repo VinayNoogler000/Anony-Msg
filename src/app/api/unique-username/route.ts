@@ -1,11 +1,7 @@
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
+import { UsernameQuerySchema } from "@/schemas/usernameSchema";
 import z from "zod";
-import { userNameValidation } from "@/schemas/signUpSchema";
-
-const UsernameQuerySchema = z.object({
-    username: userNameValidation
-});
 
 export async function GET(req: Request) {
 // 👇 This doesn't works in Next.js, 'cause the "req" object doesn't get created when the HTTP method !== "GET"   
