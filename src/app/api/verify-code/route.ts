@@ -41,25 +41,27 @@ export async function POST(req: Request) {
 
         const existingUnverifiedUser = await UserModel.findOne( { username: validatedUsername, isVerified: false } ).lean();
 
-        if (existingUnverifiedUser) {
-            if (existingUnverifiedUser.verificationCode === validatedVerifyCode) {
-                return Response.json({
-                    success: true,
-                    message: "Verification Code Correct!🎉"
-                }, {status: 200} );
-            }
-            else {
-                return Response.json({
-                    success: false,
-                    message: "Incorrect Verification Code!❌"
-                }, {status: 400} );
-            }
+        if (!existingUnverifiedUser) {
+            return Response.json({
+                success: false,
+                message: "User Not Found!❌"
+            }, {status: 404} );
+        }
+
+        const isCodeValid = existingUnverifiedUser.verificationCode === validatedVerifyCode;
+        const isCodeNotExpired = new Date(existingUnverifiedUser.verificationCodeExpiry) >= new Date();
+            
+        if (!isCodeValid && !isCodeNotExpired) {
+            return Response.json({
+                success: false,
+                message: "Invalid (incorrect or expired) Verification Code!❌"
+            }, { status: 400 });
         }
 
         return Response.json({
-            success: false,
-            message: "User Not Found!❌"
-        }, {status: 404} );
+            success: true,
+            message: "Verification Code Correct!🎉"
+        }, { status: 200 });
     }
     catch(err) {
         console.error("Error in code verification: ", err);
