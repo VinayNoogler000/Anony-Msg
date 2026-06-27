@@ -51,3 +51,39 @@ export async function POST(req: Request) {
         }, {status: 500});
     }
 }
+
+export async function GET(req: Request) {
+    await dbConnect();
+
+    try {
+        const session = await getServerSession(authOptions);
+        const loggedInUser = session?.user as User;
+
+        if (!session || !loggedInUser) {
+            return Response.json({
+                success: false,
+                message: "Not Authenticated"
+            }, { status: 401 });
+        }
+
+        const userInDB = await UserModel.findById(loggedInUser._id).lean();
+
+        if (!userInDB) {
+            return Response.json({
+                success: false,
+                message: "User Not Found!"
+            }, { status: 404 });
+        }
+
+        return Response.json({
+            success: true,
+            isAcceptingMessages: userInDB.isAcceptingMsg,
+        }, { status: 200 });
+
+    } catch (err) {
+        return Response.json({
+            success: false,
+            message: "Error in Fetching status of message acceptance. Please try again later."
+        }, {status: 500});
+    }
+}
