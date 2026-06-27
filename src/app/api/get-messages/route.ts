@@ -4,7 +4,6 @@ import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 import mongoose from "mongoose";
 
-
 export async function GET(req: Request) {
     await dbConnect();
 
@@ -41,6 +40,8 @@ export async function GET(req: Request) {
         }, { status: 200 });
     }
     catch(err) {
+        console.error("An Unexpected Error Occurred when Fetching Messages: ", err);
+
         return Response.json({
             success: false,
             message: "Error in Fetching Messages. Please try again later."
