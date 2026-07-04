@@ -109,10 +109,18 @@ function page() {
                 </Field>
               )}
             />
+
             { isCheckingUsername && <> 
               <Loader2 className="animate-spin" /> 
               Checking Username Availability...  
             </> }
+            
+            { !isCheckingUsername && usernameMsg && (
+              <p className={`text-sm ${usernameMsg === "Username is available!🎉" ? "text-green-500" : "text-red-500"}`}> 
+                {usernameMsg} 
+              </p>
+            )}
+
             <Controller
               name="email"
               control={form.control}
