@@ -4,7 +4,7 @@ import { Controller, useForm } from "react-hook-form"
 import * as z from "zod"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { useDebounceValue } from 'usehooks-ts'
+import { useDebounceCallback } from 'usehooks-ts'
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { signUpSchema } from "@/schemas/signUpSchema"
@@ -21,7 +21,7 @@ function page() {
   const [isCheckingUsername, setIsCheckingUsername] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const debouncedUsername = useDebounceValue(username, 800);
+  const debounced = useDebounceCallback(setUsername, 800);
   const router = useRouter();
 
   // zod implementation
@@ -36,7 +36,7 @@ function page() {
 
   useEffect(() => {
     // Only check username after user has typed something
-    if (!debouncedUsername[0]) {
+    if (!username) {
       return;
     }
 
@@ -46,7 +46,7 @@ function page() {
       setUsernameMsg("");
 
       try {
-        const response = await axios.get<ApiResponse>(`/api/unique-username?username=${debouncedUsername[0]}`);
+        const response = await axios.get<ApiResponse>(`/api/unique-username?username=${username}`);
         setUsernameMsg(response.data.message);
       }
       catch (error) {
@@ -58,7 +58,7 @@ function page() {
       }
     })();
     
-  }, [debouncedUsername[0]])
+  }, [username])
 
   const onSubmit = async (data:z.infer<typeof signUpSchema>) => {
     setIsSubmitting(true);
@@ -103,12 +103,16 @@ function page() {
                   <Input {...field} id={field.name} aria-invalid={fieldState.invalid} 
                     onChange={(e) => {
                       field.onChange(e);
-                      setUsername(e.target.value)
+                      debounced(e.target.value)
                     }}/>
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
             />
+            { isCheckingUsername && <> 
+              <Loader2 className="animate-spin" /> 
+              Checking Username Availability...  
+            </> }
             <Controller
               name="email"
               control={form.control}
