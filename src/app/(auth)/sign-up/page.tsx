@@ -21,7 +21,7 @@ function page() {
   const [isCheckingUsername, setIsCheckingUsername] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const debounced = useDebounceCallback(setUsername, 800);
+  const debounced = useDebounceCallback(setUsername, 500);
   const router = useRouter();
 
   // zod implementation
