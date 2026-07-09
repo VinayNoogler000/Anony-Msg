@@ -89,7 +89,7 @@ function SignUpPage() {
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
             Join AnonyMsg
           </h1>
-          <p className="mb-4">Sign-In to continue your <b>Secret Conversations</b>🤫</p>
+          <p className="mb-4">Sign-Up to start your anonymous adventure 🚀</p>
         </div>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-6">
