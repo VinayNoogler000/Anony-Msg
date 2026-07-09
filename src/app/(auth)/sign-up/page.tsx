@@ -92,7 +92,7 @@ function page() {
           <p className="mb-4">Sign-In to continue your <b>Secret Conversations</b>🤫</p>
         </div>
 
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-6">
           <FieldGroup className="@container/field-group">
             <Controller
               name="username"
@@ -145,7 +145,7 @@ function page() {
             />
           </FieldGroup>
 
-          <Button type="submit" disabled={isSubmitting} aria-disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting} aria-disabled={isSubmitting} className="self-center">
               { isSubmitting ? (
                   <> <Loader2 className="mr-2 h-4 w-4 animate-spin"/>  Please Wait...! </>
                 ) : "Signup" }
