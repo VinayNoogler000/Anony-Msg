@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 
-function page() {
+function SignUpPage() {
   const [username, setUsername] = useState<string>("");
   const [usernameMsg, setUsernameMsg] = useState<string>("");
   const [isCheckingUsername, setIsCheckingUsername] = useState<boolean>(false);

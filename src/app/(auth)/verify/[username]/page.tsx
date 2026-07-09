@@ -12,7 +12,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
-function VerifyAccount() {
+function VerifyAccountPage() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const router = useRouter()
   const { username } = useParams<{ username: string }>();
