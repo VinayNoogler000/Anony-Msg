@@ -74,4 +74,4 @@ function VerifyAccountPage() {
   )
 }
 
-export default VerifyAccount;
+export default VerifyAccountPage;

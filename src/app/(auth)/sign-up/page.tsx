@@ -165,4 +165,4 @@ function SignUpPage() {
   )
 }
 
-export default page
+export default SignUpPage
