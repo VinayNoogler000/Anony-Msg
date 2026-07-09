@@ -104,7 +104,7 @@ function SignUpPage() {
                     onChange={(e) => {
                       field.onChange(e);
                       debounced(e.target.value)
-                    }}/>
+                    }} placeholder="For ex: 'vt000'"/>
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
@@ -127,7 +127,7 @@ function SignUpPage() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} orientation={"responsive"}>
                   <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid}/>
+                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="For ex:  'vt000@gmail.com'"/>
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
@@ -138,7 +138,7 @@ function SignUpPage() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} orientation={"responsive"}>
                   <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid}/>
+                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="For ex:  'as0f94Gjf0(*f)_A'"/>
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}

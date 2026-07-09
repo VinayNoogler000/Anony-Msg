@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { signInSchema } from "@/schemas/signInSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
-import { Fahkwang } from "next/font/google";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -65,7 +64,7 @@ function SingInPage() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} orientation={"responsive"}>
                   <FieldLabel htmlFor={field.name}>Email/Username</FieldLabel>
-                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="For eg:  'vt000@gmail.com' or 'vt000'"/>
+                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="For ex:  'vt000@gmail.com' or 'vt000'"/>
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
@@ -77,7 +76,7 @@ function SingInPage() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} orientation={"responsive"}>
                   <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="For eg:  'as0f94Gjf0(*f)_A'"/>
+                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="For ex:  'as0f94Gjf0(*f)_A'"/>
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
