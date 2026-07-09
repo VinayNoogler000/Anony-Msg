@@ -15,7 +15,7 @@ export const authOptions: NextAuthOptions = {
             name: "Credentials",
             type: "credentials",
             credentials: {
-                email: { label: "Email", type: "email", placeholder: "vinaytambey000@gmail.com" },
+                email: { label: "Email", type: "email", placeholder: "abc@gmail.com" },
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials: any): Promise<any> {
@@ -47,7 +47,7 @@ export const authOptions: NextAuthOptions = {
     // "pages" option allows us to define that for which routes we want to load custom-defined pages, instead 
     // of allowing Next.js to load simple, unbranded authentication pages for handling Sign in, Sign out, 
     // Email Verification and displaying error messages. For ex: when user will send request to "/sign-in" 
-    // route, then the custom-page in "sign-in.tsx" file in "src/pages/" will be loaded by which Next.js 
+    // route, then the custom-page "sign-in.tsx" file in "src/pages/" will be loaded by Next.js 
     // in which the form should be consisting of fields defined in the "provider" option, where user can add their credentials.
     pages: { 
         signIn: "/sign-in",
