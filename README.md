@@ -69,3 +69,10 @@ For better understanding, you can check out the actual implementation in `app/ap
 22. To get the entire URL of the current page in the client-side of JS-based Web Applications, we can use `window.location.href` property, which returns the entire URL of the current page as a string, consisting of protocol, host name, path, and query parameters; To get just the protocol of the URL of the current page, we can use `window.location.protocol` property, which returns the protocol as string, like "http:" or "https:"; To get the host name of the URL of the current page, we can use `window.location.hostname` property, and to get both the protocol with host name of the URL of the current page, we can use `window.location.origin` property, which returns the protocol with host name as string, like "https://anonymsg.vercel.app". For better understanding, you can check out the actual implementation in `src/app/(app)/dashboard/page.tsx` file.
 
 23. Adding ShadCN Carousel Components with Autoplay functionality in Webapp, in which I also explored "Embla Carousel" Library, and it's "Autoplay" plugin, which strengthen my ability to implement hard UI components into Webapp. You can see my implementation in the [HomePage](https://github.com/VinayNoogler000/Anony-Msg/blob/main/src/app/(app)/page.tsx);
+
+
+
+
+## To-Do:
+
+1. Use ShadCN's Skeleton Component in the Dashboard Page's Messages Display section, to display a message card skeleton until the Messages gets loaded in the page.
