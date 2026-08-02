@@ -27,11 +27,18 @@ export async function GET(req: Request) {
             { $group: { _id: "$_id", messages: {$push: "$messages" }} } // groups all the divided docs based on no. of messages into a single document consisting of 'user-id' and 'messages' sorted in latest-oldest order
         ]);
 
-        if (!userInDB || userInDB.length === 0) {
+        if (!userInDB) {
             return Response.json({
-            success: false,
-            message: "User Not Found!"
+                success: false,
+                message: "User Not Found!"
             }, { status: 404 });
+        }
+
+        if (userInDB.length === 0) {
+            return Response.json({
+            success: true,
+            message: "No Messages Received!"
+            }, { status: 200 });
         }
 
         return Response.json({

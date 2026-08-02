@@ -61,7 +61,7 @@ function page() {
     try {
       const response = await axios.get<ApiResponse>("/api/get-messages");
       setMessages(response.data.messages || []);
-      toast.success("Refreshed Messages", {description: "Showing latest messages", dismissible: true})
+      toast.success("Refreshed Messages", {description: response.data.message || "Showing latest messages", dismissible: true})
     } 
     catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
