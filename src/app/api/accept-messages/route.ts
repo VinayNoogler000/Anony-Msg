@@ -20,9 +20,10 @@ export async function POST(req: Request) {
             }, { status: 401 });
         }
 
-        const { isAcceptingMsg } = await req.json();
+        const data = await req.json();
+        const { isAcceptingMsg } = data;
 
-        if (!isAcceptingMsg) {
+        if (!data) {
             return Response.json({
                 success: false,
                 message: "Missing current status of message acceptance."
