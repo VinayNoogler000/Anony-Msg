@@ -1,6 +1,5 @@
 "use client"
 import MsgCard from '@/components/MsgCard';
-import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
@@ -8,9 +7,8 @@ import { Message } from '@/model/User'
 import { AcceptMsgSchema } from '@/schemas/acceptMsgSchema';
 import ApiResponse from '@/types/ApiResponse';
 import { zodResolver } from '@hookform/resolvers/zod';
-import axios, { Axios, AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Loader2, RefreshCcw } from 'lucide-react';
-import { User } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
@@ -96,7 +94,7 @@ function page() {
   const copyToClipboard = useCallback(() => {
     navigator.clipboard.writeText(profileUrl);
     toast.info("URL Copied", { description: "Profile URL has been Copied to Clipboard", dismissible: true });
-  }, []);
+  }, [profileUrl]);
 
   useEffect(() => {
     if (!session || !session.user) return;
