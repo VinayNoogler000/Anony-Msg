@@ -70,7 +70,7 @@ For better understanding, you can check out the actual implementation in `app/ap
 
 23. Adding ShadCN Carousel Components with Autoplay functionality in Webapp, in which I also explored "Embla Carousel" Library, and it's "Autoplay" plugin, which strengthen my ability to implement hard UI components into Webapp. You can see my implementation in the [HomePage](https://github.com/VinayNoogler000/Anony-Msg/blob/main/src/app/(app)/page.tsx);
 
-24. We can access Path Params in Next.js server-side components by using `params` property of the `props` object passed to the component, which is an object containing all the path parameters defined in the route, whereas for client-side components, we can use `useParams()` hook from "next/navigation" library to access the path parameters. For better understanding, you can check out the actual implementation in `api/delete-message/[messageId]/route.ts` and `u/[username]/page.tsx` files, respectively.
+24. We can access Path Params in Next.js API routes by using `params` property of the `props` object passed to the component, which is promise object containing all the path parameters defined in the route (so using `await` is compulsory), whereas for client-side components, we can use `useParams()` hook from "next/navigation" library to access the path parameters. For better understanding, you can check out the actual implementation in `api/delete-message/[messageId]/route.ts` and `u/[username]/page.tsx` files, respectively.
 
 
 
