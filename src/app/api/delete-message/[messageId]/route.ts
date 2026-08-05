@@ -8,8 +8,15 @@ interface msgIdPathParam {
 }
 
 export async function DELETE(req: Request, {params}:msgIdPathParam) {
-    const messageId = params.messageId;
+    const { messageId } = await params;
     await dbConnect();
+
+    if (!messageId) {
+        return Response.json({
+                success: false,
+                message: "Message ID is required!"
+            }, { status: 404 });
+    }
 
     try {
         const session = await getServerSession(authOptions);
@@ -22,7 +29,7 @@ export async function DELETE(req: Request, {params}:msgIdPathParam) {
             }, { status: 401 });
         }
         
-        const updatedUser = await UserModel.updateOne( { _id: loggedInUser?._id }, { $pull: { messages: { _id: messageId } } });
+        const updatedUser = await UserModel.updateOne( { _id: loggedInUser?._id }, { $pull: { messages: { _id: messageId } } }).lean();
 
         if (updatedUser.modifiedCount === 0) {
             return Response.json({
