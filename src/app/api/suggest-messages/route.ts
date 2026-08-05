@@ -20,14 +20,18 @@ export async function GET(req: Request): Promise<Response> {
     } 
     catch (error) {
         if (error instanceof APICallError) {
-            const { name, statusCode, responseHeaders, message } = error;
-            return Response.json({
-                name, statusCode, responseHeaders, message
+            const {statusCode, message } = error;
+            return Response.json({ 
+                success: false,
+                message: `${message}. Please try again later!`
             }, {status: statusCode})
         }
         else {
             console.error("An unexpected error occurred: ", error);
-            throw error;
+            return Response.json({ 
+                success: false,
+                message: "Server-side problem. Please try again later!"
+            }, {status: 500});
         }
     }
 }
