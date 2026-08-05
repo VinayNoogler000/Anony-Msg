@@ -44,7 +44,7 @@ export async function POST( req:Request ): Promise<Response> {
         return Response.json({
             success: true,
             message: "Message Sent Successfully"
-        }, { status: 403 });
+        }, { status: 200 });
     }
     catch (err) {
         console.error("An Unexpected Error Occurred when Sending Messages: ", err);
