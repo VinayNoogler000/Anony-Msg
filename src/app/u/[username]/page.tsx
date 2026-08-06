@@ -8,27 +8,33 @@ import ApiResponse from '@/types/ApiResponse';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useCompletion } from '@ai-sdk/react';
 
 function page() {
   const { username } = useParams();
   const [ isSending, setIsSending ] = useState<boolean>(false);
-  const [ isSuggesting, setIsSuggesting ] = useState<boolean>(false);
+  const { completion, complete, isLoading, stop, error } = useCompletion({
+    api: '/api/suggest-messages/',
+    streamProtocol: "text",
+    onFinish: () => (error !instanceof Error) && toast.success("Message Suggestions Completed", {dismissible: true}),
+    onError: (error) => toast.error("An Error Occurred", {description: error.message, dismissible: true})
+  });
 
   const form = useForm<z.infer<typeof msgSchema>>({
     resolver: zodResolver(msgSchema),
     defaultValues: { content: "" }
   });
 
-  const onSubmit = async (data: z.infer<typeof msgSchema>) => {
+  const sendMessage = async (data: z.infer<typeof msgSchema>) => {
     setIsSending(true);
 
     try {
-      const response = await axios.post<ApiResponse>("/api/send-message/", { username, content: data.content });
-      toast.success("Message Sent", {dismissible: true});
+      await axios.post<ApiResponse>("/api/send-message/", { username, content: data.content });
+      toast.success("Message Sent!", {dismissible: true});
     }
     catch(err) {
       console.error("Error in Sending Message: ", err);
@@ -41,28 +47,30 @@ function page() {
   }
 
   const handleSuggestMsgsBtnClick = async () => {
-    setIsSuggesting(true);
-
-    try {
-      const response = await axios.get("/api/suggest-messages/");
-      console.log(response.data);
-      toast.success("Message Suggestions Loaded", {dismissible: true});
-    } 
-    catch (err) {
-      const axiosError = err as AxiosError<ApiResponse>;
-      toast.error("Failed to Suggest Messages.", {description: axiosError.response?.data.message, dismissible: true});
-    }
-    finally {
-      setIsSuggesting(false);
-    }
+    await complete('');
+    // try {
+    //   await complete('');
+    // } 
+    // catch (err) {
+    //   const axiosError = err as AxiosError<ApiResponse>;
+    //   toast.error("Failed to Suggest Messages.", {description: axiosError.response?.data.message, dismissible: true});
+    // }
   }
+
+  const suggestions = completion.split("||").map((msg) => msg.trim());
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error.message)
+    }
+  }, [error])
 
   return (
     <div>
       <h1 className="text-4xl font-bold">Public Profile Link</h1>
       
       <div>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(sendMessage)}>
           <Controller
             name="content"
             control={form.control}
@@ -84,9 +92,27 @@ function page() {
       </div>
 
       <div>
-        <Button type="button" disabled={isSuggesting} aria-disabled={isSuggesting} className="" onClick={handleSuggestMsgsBtnClick}>
+        <Button type="button" disabled={isLoading} aria-disabled={isLoading} className="" onClick={handleSuggestMsgsBtnClick}>
             Suggest Messages
         </Button>
+        
+        <Button type="button" disabled={!isLoading} aria-disabled={!isLoading} className="" onClick={stop}>
+            Stop
+        </Button>
+
+        { error && (<p> {error.message} </p>) }
+
+        <div className="mt-4">
+          { isLoading && completion.length === 0 && <p>Suggesting...</p> }
+
+          {suggestions.length > 0 && (
+            <ul>
+              {suggestions.map((msg, idx) => (
+                <li key={idx}>{msg}</li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </div>
   )
