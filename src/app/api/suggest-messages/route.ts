@@ -1,57 +1,7 @@
-import { streamText, createTextStreamResponse, toTextStream, RetryError, APICallError, NoSuchProviderReferenceError, NoSuchProviderError, NoSuchModelError, AISDKError } from 'ai';
+import { streamText, createTextStreamResponse, AISDKError } from 'ai';
 import { createOpenRouter } from '@openrouter/ai-sdk-provider';
 import { NextResponse } from 'next/server';
-
-function getStatusCode(error: unknown): number {
-    if (error instanceof Error) {
-        const message = error.message.toLowerCase();
-
-        if (message.includes('unauthorized') || message.includes('api key')) {
-            console.error("Unathorize | API Key Invalid Error [api/suggest-messages/route.ts]")
-            return 500;
-        }
-        if (message.includes('rate limit') || message.includes('too many requests')) { 
-            console.error("Rate Limit Error [api/suggest-messages/route.ts]");
-            return 500;
-        }
-
-        if (message.includes('bad request')) {
-            console.error("Bad Request Error [api/suggest-messages/route.ts]");
-            return 400;
-        }
-    }
-    
-    if (APICallError.isInstance(error)) {
-        console.error("AI-API Call Error [api/suggest-messages/route.ts]");
-        return typeof error.statusCode === 'number' ? error.statusCode : 501;
-    }
-
-    if (RetryError.isInstance(error)) {
-        console.error("AI-API Retry Operations Error [api/suggest-messages/route.ts]");
-        return 501;
-    }
-
-    if (NoSuchProviderReferenceError.isInstance(error)) {
-        console.error("AI-API Provider Reference Not Found Error [api/suggest-messages/route.ts]");
-        return 501;
-    }
-
-    if (NoSuchProviderError.isInstance(error)) {
-        console.error("AI-API Provider ID Not Found Error [api/suggest-messages/route.ts]");
-        return 501;
-    }
-    
-    if (NoSuchModelError.isInstance(error)) {
-        console.error("AI-API Model ID Not Found Error [api/suggest-messages/route.ts]");
-        return 501;
-    }
-
-    return 500;
-}
-
-function getErrorMessage(error: unknown): string {
-    return error instanceof Error ? error.message : 'Something went wrong while generating suggestions.';
-}
+import { getErrorMessage, getStatusCode } from '@/helpers/error';
 
 export async function POST() {
     const prompt = "Create a list of three open-ended and engaging questions formatted as a single string. Each question should be separated by '||'. These questions are for an anonymous social messaging platform, like Qooh.me, and should be suitable for a diverse audience. Avoid personal or sensitive topics, focusing instead on universal themes that encourage friendly interaction. For example, your output should be structured like this: 'What’s a hobby you’ve recently started?||If you could have dinner with any historical figure, who would it be?||What’s a simple thing that makes you happy?'. Without any quotation marks, whether single or double quotes. Ensure the questions are intriguing, foster curiosity, and contribute to a positive and welcoming conversational environment.";
@@ -72,6 +22,7 @@ export async function POST() {
     ]
     
     let maxOutputTokens = 400;
+    let err:Error | any = null;
 
     for (const model of models) {
         try {
@@ -79,7 +30,7 @@ export async function POST() {
                 model: openrouter(model),
                 prompt,
                 onError({error}) {
-                    const err = error as Error;
+                    err = error as Error;
                     console.log(`----Streaming Error [${model}]: `, err.message, "----");
                 },
                 maxOutputTokens,
@@ -111,11 +62,13 @@ export async function POST() {
                 console.log("Max Output Tokens increased to", maxOutputTokens);
             }
         }
-        catch (error) { // NOTE: Application never reaches this "Catch{} block", because "try-catch" statements never experiences any exceptions or errors, due to asynchrnous errors sent by the AI-API.
+        catch (error) {
+            err = error;
+
             // Catches AI_RetryError, AI_APICallError, Rate Limit, or Upstream Errors
             if (AISDKError.isInstance(error)) {
                 console.error(`[${model}] failed with error:`, error);
-                return NextResponse.json({ success: false, message: getErrorMessage(error) }, { status: getStatusCode(error) });
+                // return NextResponse.json({ success: false, message: getErrorMessage(error) }, { status: getStatusCode(error) });
             }
             else {
                 // General error handling
@@ -125,5 +78,5 @@ export async function POST() {
         }
     }
     
-    return new Response("All fallback models hit output token limit.", { status: 500 });
+    return NextResponse.json({ success: false, message: getErrorMessage(err) }, { status: getStatusCode(err) });
 }
