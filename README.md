@@ -76,8 +76,11 @@ For better understanding, you can check out the actual implementation in `app/ap
 
 26. Adding fallback models using OpenRouter Provider in Vercel-AI SDK to prevent "single-point-of-failure" phenomenon in case the primary AI model fails to generate a response, which is especially useful for production-grade applications like AnonyMsg. For better understanding, you can check out the actual implementation in `src/app/api/suggest-messages/route.ts` file.
 
+27. Using `Skeleton()` component from ShadCN UI library to display skeletons of same dimensions as message card, until the suggestions get loaded in the page, which is especially useful for improving user experience and engagement. Inspired from the YouTube platform's videos loading skeletons, which are displayed until the videos get loaded in the page. For better understanding, you can check out the actual implementation in `src/app/u/[username]/page.tsx` file.
 
 
 ## To-Do:
 
-1. Use ShadCN's Skeleton Component in the Dashboard Page's Messages Display section, to display a message card skeleton until the Messages gets loaded in the page.
+1. ✅ Use ShadCN's Skeleton Component in the Profile Page's Message Suggestions section, to display three skeletons of same dimensions as message card, until the suggestions get loaded in the page **(COMPLETED)**
+
+2. Test "Sending Verification Emails" functionality by using different user emails, instead of using the same email of `Resend.js` account, to make the application production-ready, and usable for real users. **(NOT STARTED)**
