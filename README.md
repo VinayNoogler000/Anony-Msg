@@ -72,6 +72,8 @@ For better understanding, you can check out the actual implementation in `app/ap
 
 24. We can access Path Params in Next.js API routes by using `params` property of the `props` object passed to the component, which is promise object containing all the path parameters defined in the route (so using `await` is compulsory), whereas for client-side components, we can use `useParams()` hook from "next/navigation" library to access the path parameters. For better understanding, you can check out the actual implementation in `api/delete-message/[messageId]/route.ts` and `u/[username]/page.tsx` files, respectively.
 
+25. When finalizing the funtionality of "getting message suggestions from AI", I learnt to use "Open-Router" as provider for "Vercel-AI SDK" instead of "Google Gemini", which allows us to change the provider of AI model dynamically, and also allows us to use multiple providers (like OpenAI, Google Gemini, and more) in a single application seamlessly. Then, I also learnt to properly utilize `streamText()`, `createTextStreamResponse()`, and `toTextStream()` methods of "Vercel-AI SDK" to stream the textual-data response from AI model in real-time to client-side, in chunks, instead of waiting for the entire response to be generated and sent to client-side at once, which is especially useful for large responses. And, in client-side of Next.js, I learnt about using `useCompletion()` hook from "Vercel-AI SDK" to handle the text-streaming response from AI model in real-time, and also to handle the state of the streaming response, like `isLoading`, and `completion`. For better understanding, you can check out the actual implementation in `src/app/api/suggest-messages/route.ts` and `src/app/u/[username]/page.tsx` files, respectively.
+
 
 
 
