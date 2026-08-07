@@ -71,6 +71,8 @@ export async function POST() {
         'google/gemma-4-31b-it:free',
     ]
     
+    let maxOutputTokens = 400;
+
     for (const model of models) {
         try {
             const result = streamText({
@@ -80,7 +82,7 @@ export async function POST() {
                     const err = error as Error;
                     console.log(`----Streaming Error [${model}]: `, err.message, "----");
                 },
-                maxOutputTokens: 400,
+                maxOutputTokens,
                 maxRetries: 0,
             });
             
@@ -101,6 +103,13 @@ export async function POST() {
             }
             
             console.warn(`Model ${model} hit token limit (finishReason: length). Trying next model...`);
+            
+            // Doubles the Output Token Limit if the streaming failed due to lower limit of output token
+            const finishReason = await result.finishReason; 
+            if (finishReason === "length") {
+                maxOutputTokens *= 2;
+                console.log("Max Output Tokens increased to", maxOutputTokens);
+            }
         }
         catch (error) { // NOTE: Application never reaches this "Catch{} block", because "try-catch" statements never experiences any exceptions or errors, due to asynchrnous errors sent by the AI-API.
             // Catches AI_RetryError, AI_APICallError, Rate Limit, or Upstream Errors
