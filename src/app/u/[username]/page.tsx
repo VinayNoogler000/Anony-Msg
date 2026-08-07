@@ -18,6 +18,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import { getErrorMessage } from '@/helpers/error';
+import { Skeleton } from "@/components/ui/skeleton"
 
 const parseJsonErrorMessage = (error:Error | any):string => {
   if ( JSON.parse(error.message).message.includes("No output generated. Check the stream for errors") ) {
@@ -26,6 +27,56 @@ const parseJsonErrorMessage = (error:Error | any):string => {
 
   return getErrorMessage(error);
 }
+
+const specialChar = "||"; // character used as as dividor between messages in AI's reponse
+
+const initialSuggestions:string = "What's your favorite movie?||Do you have any pets?||What's your dream job?";
+
+const renderSuggestions = (
+  isSuggestionsLoading: boolean,
+  error: Error | any,
+  suggestions: string[],
+  onSuggestionClick: (message: string) => void
+) => {
+
+  if (isSuggestionsLoading) {
+    return (
+      <>
+        <Skeleton className="h-9 w-full rounded-md" />
+        <Skeleton className="h-9 w-full rounded-md" />
+        <Skeleton className="h-9 w-full rounded-md" />
+      </>
+    );
+  }
+
+  if (!isSuggestionsLoading && error) {
+    return (
+      <p className="text-red-500">
+        {parseJsonErrorMessage(error)}
+      </p>
+    );
+  }
+
+  if (!isSuggestionsLoading && !error && !suggestions[0] ) {
+    return <>
+      <p> Message Suggestions Stopped by You. </p>
+
+      {initialSuggestions.split(specialChar).map((msg, idx) => (
+      <Button key={idx} variant="outline" className="mb-2" onClick={() => onSuggestionClick(msg)} >
+        {msg}
+      </Button>
+    ))}
+    </>
+  }
+
+  return (<>
+    {suggestions.map((msg, idx) => (
+      <Button key={idx} variant="outline" className="mb-2" onClick={() => onSuggestionClick(msg)} >
+        {msg}
+      </Button>
+    ))}
+  </>);
+};
 
 function page() {
   const { username } = useParams<{ username:string }>();
@@ -39,7 +90,7 @@ function page() {
       }
     },
     onError: (error) => toast.error("An Error Occurred", {description: parseJsonErrorMessage(error), dismissible: true}),
-    initialCompletion: "What's your favorite movie?||Do you have any pets?||What's your dream job?"
+    initialCompletion: initialSuggestions
   });
 
   const { watch, setValue, handleSubmit, control, reset } = useForm<z.infer<typeof msgSchema>>({
@@ -77,7 +128,7 @@ function page() {
     }
   }
 
-  const suggestions = completion.split("||");
+  const suggestions = completion.split(specialChar);
 
   return (
     <div className="container mx-auto my-8 p-6 bg-white rounded max-w-4xl">
@@ -139,14 +190,8 @@ function page() {
           </CardHeader>
 
           <CardContent className="flex flex-col space-y-4">
-            {error ?
-              (<p className="text-red-500">{parseJsonErrorMessage(error)}</p>) :
-              (suggestions.map((msg, idx) => (
-                <Button key={idx} variant="outline" className="mb-2" onClick={() => setValue("content", msg)}>
-                  {msg}
-                </Button>
-              )))
-            }
+            {renderSuggestions(isSuggestionsLoading, error, suggestions, (message) => setValue("content", message)
+            )}
           </CardContent>
         </Card>
         
