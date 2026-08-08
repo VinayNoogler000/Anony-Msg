@@ -2,8 +2,20 @@ import { streamText, createTextStreamResponse, AISDKError } from 'ai';
 import { createOpenRouter } from '@openrouter/ai-sdk-provider';
 import { NextResponse } from 'next/server';
 import { getErrorMessage, getStatusCode } from '@/helpers/error';
+import { getServerSession, User } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]/options';
 
 export async function POST() {
+    const session = await getServerSession(authOptions);
+    const loggedInUser = session?.user as User;
+        
+    if (!session || !loggedInUser) {
+        return Response.json({
+            success: false,
+            message: "Not Authenticated"
+        }, { status: 401 });
+    }
+
     const prompt = "Create a list of three open-ended and engaging questions formatted as a single string. Each question should be separated by '||'. These questions are for an anonymous social messaging platform, like Qooh.me, and should be suitable for a diverse audience. Avoid personal or sensitive topics, focusing instead on universal themes that encourage friendly interaction. For example, your output should be structured like this: 'What’s a hobby you’ve recently started?||If you could have dinner with any historical figure, who would it be?||What’s a simple thing that makes you happy?'. Without any quotation marks, whether single or double quotes. Ensure the questions are intriguing, foster curiosity, and contribute to a positive and welcoming conversational environment.";
 
     const openrouter = createOpenRouter({
