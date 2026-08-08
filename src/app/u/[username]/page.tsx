@@ -198,19 +198,6 @@ function page() {
       </div>  
 
       <Separator className="my-6" />
-      
-      <footer className="py-6 text-center flex flex-col gap-4 items-center absolute bottom-0 left-1/2 -translate-x-1/2 ">
-        <div>
-          Made with ❤️ by
-          <Link href="https://linktr.ee/vinay_tambey" target="_blank" className="inline border-b-2 border-gray-200"> Vinay Tambey </Link>
-        </div>
-
-        <Link href="https://vinay-tambey-portfolio.vercel.app/" target="_blank">
-          <Button variant="secondary">Explore Vinay's Portfolio</Button>
-        </Link>
-
-        <p>© 2026 <Link href={'/'}>AnonyMsg</Link>. All rights reserved.</p>
-      </footer>
     </div>
   )
 }
