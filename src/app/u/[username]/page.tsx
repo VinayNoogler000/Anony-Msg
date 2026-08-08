@@ -77,6 +77,7 @@ function Page() {
   const { username } = useParams<{ username: string }>();
   const router = useRouter();
   const [isSending, setIsSending] = useState<boolean>(false);
+  
   const { complete, completion, isLoading: isSuggestionsLoading, stop, error } = useCompletion({
     api: '/api/suggest-messages/',
     streamProtocol: "text",
@@ -108,6 +109,8 @@ function Page() {
       console.error("Error in Sending Message: ", err);
       const axiosError = err as AxiosError<ApiResponse>;
       toast.error("Error", { description: axiosError.response?.data.message || "Failed to send message. Please try again later!", dismissible: true });
+
+      if (axiosError.response?.data.message.includes("Not Authenticated")) router.replace("/sign-in");0
     }
     finally {
       setIsSending(false);
