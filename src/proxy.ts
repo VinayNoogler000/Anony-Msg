@@ -34,6 +34,10 @@ export async function proxy(request: NextRequest) {
         }
 
         // if no referrer:
+        if (url.searchParams.has("ref", "email")) { // user visited from link in verification-email
+            return NextResponse.next();
+        }
+
         return NextResponse.redirect(new URL("/sign-in", request.url));
     }
 

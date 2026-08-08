@@ -9,7 +9,7 @@ interface VerificationEmailProps {
 }
 
 export default function VerificationEmail({ username, otp, verificationLink }: VerificationEmailProps) {
-  verificationLink = `${verificationLink}/verify/${username}`;
+  verificationLink = `${verificationLink}/verify/${username}?ref=email`;
 
   return (
     <Html lang="en" dir="ltr">
