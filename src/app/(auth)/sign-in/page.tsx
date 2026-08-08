@@ -28,19 +28,21 @@ function SingInPage() {
   // Form onSubmit Handler
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     setIsSubmitting(true);
+    const callbackUrl = new URLSearchParams(window.location.search).get("callbackUrl") || "/dashboard";
 
     const result = await signIn("credentials", {
       redirect: false,
       identifier: data.identifier,
       password: data.password,
+      callbackUrl,
     })
 
     if (result?.error) {
-      toast.error("Login Failed", { description: result.error, dismissible: true, duration: 10000});
+      toast.error("Login Failed", { description: result.error, dismissible: true, duration: 10000 });
     }
-      
+
     if (result?.url) {
-      router.replace("/dashboard");
+      router.replace(result.url);
     }
 
     setIsSubmitting(false);
