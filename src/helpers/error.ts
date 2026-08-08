@@ -1,3 +1,4 @@
+import errorsToRecord from "@hookform/resolvers/io-ts/dist/errorsToRecord.js";
 import { APICallError, NoSuchModelError, NoSuchProviderError, NoSuchProviderReferenceError, RetryError } from "ai";
 
 export function getStatusCode(error: unknown): number {
@@ -48,5 +49,13 @@ export function getStatusCode(error: unknown): number {
 }
 
 export function getErrorMessage(error: Error | any): string {
+    if (error.message.includes("Not Authenticated")) {
+        return "Not Authenticated. Please Login!";
+    }
+
+    if ( error.message.includes("No output generated. Check the stream for errors") ) {
+        return "Unable to Suggest Messages due to AI Model's rate-limiting or high server-load. Please try again later!";
+    }
+
     return error instanceof Error ? error.message : "Something went wrong. Please try again later";
 }

@@ -6,8 +6,8 @@ import { msgSchema } from '@/schemas/msgSchema';
 import ApiResponse from '@/types/ApiResponse';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
-import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -16,21 +16,16 @@ import { Textarea } from '@/components/ui/textarea';
 import { Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import Link from 'next/link';
 import { getErrorMessage } from '@/helpers/error';
 import { Skeleton } from "@/components/ui/skeleton"
 
-const parseJsonErrorMessage = (error:Error | any):string => {
-  if ( JSON.parse(error.message).message.includes("No output generated. Check the stream for errors") ) {
-    return "Unable to Suggest Messages due to AI Model's rate-limiting or high server-load. Please try again later!";
-  }
-
-  return getErrorMessage(error);
+const parseJsonErrorMessage = (error: Error | any): string => {
+  return getErrorMessage(JSON.parse(error.message));
 }
 
 const specialChar = "||"; // character used as as dividor between messages in AI's reponse
 
-const initialSuggestions:string = "What's your favorite movie?||Do you have any pets?||What's your dream job?";
+const initialSuggestions: string = "What's your favorite movie?||Do you have any pets?||What's your dream job?";
 
 const renderSuggestions = (
   isSuggestionsLoading: boolean,
@@ -57,15 +52,15 @@ const renderSuggestions = (
     );
   }
 
-  if (!isSuggestionsLoading && !error && !suggestions[0] ) {
+  if (!isSuggestionsLoading && !error && !suggestions[0]) {
     return <>
       <p> Message Suggestions Stopped by You. </p>
 
       {initialSuggestions.split(specialChar).map((msg, idx) => (
-      <Button key={idx} variant="outline" className="mb-2" onClick={() => onSuggestionClick(msg)} >
-        {msg}
-      </Button>
-    ))}
+        <Button key={idx} variant="outline" className="mb-2" onClick={() => onSuggestionClick(msg)} >
+          {msg}
+        </Button>
+      ))}
     </>
   }
 
@@ -78,18 +73,19 @@ const renderSuggestions = (
   </>);
 };
 
-function page() {
-  const { username } = useParams<{ username:string }>();
-  const [ isSending, setIsSending ] = useState<boolean>(false);
-  const { complete, completion, isLoading:isSuggestionsLoading, stop, error } = useCompletion({
+function Page() {
+  const { username } = useParams<{ username: string }>();
+  const router = useRouter();
+  const [isSending, setIsSending] = useState<boolean>(false);
+  const { complete, completion, isLoading: isSuggestionsLoading, stop, error } = useCompletion({
     api: '/api/suggest-messages/',
     streamProtocol: "text",
     onFinish: () => {
-      if ( !(error instanceof Error) ) {
-        toast.success("Message Suggestions Completed", {dismissible: true});
+      if (!(error instanceof Error)) {
+        toast.success("Message Suggestions Completed", { dismissible: true });
       }
     },
-    onError: (error) => toast.error("An Error Occurred", {description: parseJsonErrorMessage(error), dismissible: true}),
+    onError: (error) => toast.error("An Error Occurred", { description: parseJsonErrorMessage(error), dismissible: true }),
     initialCompletion: initialSuggestions
   });
 
@@ -105,13 +101,13 @@ function page() {
 
     try {
       await axios.post<ApiResponse>("/api/send-message/", { username, content: data.content });
-      toast.success("Message Sent!", {dismissible: true});
+      toast.success("Message Sent!", { dismissible: true });
       reset({ content: '' });
     }
-    catch(err) {
+    catch (err) {
       console.error("Error in Sending Message: ", err);
       const axiosError = err as AxiosError<ApiResponse>;
-      toast.error("Error", {description: axiosError.response?.data.message || "Failed to send message. Please try again later!", dismissible: true });
+      toast.error("Error", { description: axiosError.response?.data.message || "Failed to send message. Please try again later!", dismissible: true });
     }
     finally {
       setIsSending(false);
@@ -124,11 +120,22 @@ function page() {
     }
     catch (error) {
       console.error('Error fetching messages:', error);
-      toast.error("Error", {description: "Message Suggestions Failed due to technical issues. Please try again later!", dismissible: true });
+      toast.error("Error", { description: "Message Suggestions Failed due to technical issues. Please try again later!", dismissible: true });
     }
   }
 
   const suggestions = completion.split(specialChar);
+
+  useEffect(() => {
+    if (!error) {
+      return;
+    }
+
+    const errMsg = parseJsonErrorMessage(error);
+    if (errMsg === "Not Authenticated. Please Login!") {
+      router.replace("/sign-in");
+    }
+  }, [error, router]);
 
   return (
     <div className="container mx-auto my-8 p-6 bg-white rounded max-w-4xl">
@@ -179,11 +186,11 @@ function page() {
               Stop
             </Button>
           </div>
-          
-          <p>Click on any message below to select it.</p> 
+
+          <p>Click on any message below to select it.</p>
         </div>
-        
-        
+
+
         <Card>
           <CardHeader>
             <h3 className="text-xl font-semibold">Messages</h3>
@@ -194,12 +201,12 @@ function page() {
             )}
           </CardContent>
         </Card>
-        
-      </div>  
+
+      </div>
 
       <Separator className="my-6" />
     </div>
   )
 }
 
-export default page
+export default Page
