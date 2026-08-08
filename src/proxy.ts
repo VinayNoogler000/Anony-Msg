@@ -27,7 +27,7 @@ export async function proxy(request: NextRequest) {
         if (referer) {
             const refererUrl = new URL(referer);
             
-            if (refererUrl.pathname !== "/sign-up") {
+            if (refererUrl.pathname !== "/sign-up" && refererUrl.pathname !== "/sign-in") {
                 return NextResponse.redirect(new URL("/sign-in", request.url));
             }
             else return NextResponse.next();

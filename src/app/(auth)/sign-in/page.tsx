@@ -39,6 +39,10 @@ function SingInPage() {
 
     if (result?.error) {
       toast.error("Login Failed", { description: result.error, dismissible: true, duration: 10000 });
+      
+      if (result.error.includes("User Not Verified")) {
+        router.replace(`/verify/${data.identifier}`);
+      }
     }
 
     if (result?.url) {
