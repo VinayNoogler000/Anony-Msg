@@ -64,7 +64,7 @@ function SingInPage() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} orientation={"responsive"}>
                   <FieldLabel htmlFor={field.name}>Email/Username</FieldLabel>
-                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="For ex:  'johndoe@gmail.com' or 'jd007'"/>
+                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="For ex:  'johndoe@gmail.com' or 'jd007'" autoComplete="true" />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
@@ -76,12 +76,12 @@ function SingInPage() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} orientation={"responsive"}>
                   <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="For ex:  'as0f94Gjf0(*f)_A'"/>
+                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="For ex:  'as0f94Gjf0(*f)_A'" />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
             />
-            
+
           </FieldGroup>
 
           <Button type="submit" disabled={isSubmitting} aria-disabled={isSubmitting} className="self-center">

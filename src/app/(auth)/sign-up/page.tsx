@@ -104,7 +104,7 @@ function SignUpPage() {
                     onChange={(e) => {
                       field.onChange(e);
                       debounced(e.target.value)
-                    }} placeholder="For ex: 'jd007'"/>
+                    }} placeholder="For ex: 'jd007'" autoComplete="true"/>
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
@@ -127,7 +127,7 @@ function SignUpPage() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} orientation={"responsive"}>
                   <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="For ex:  'johndoe@gmail.com'"/>
+                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="For ex:  'johndoe@gmail.com'" autoComplete="true" />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
