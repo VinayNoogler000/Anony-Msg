@@ -78,6 +78,12 @@ For better understanding, you can check out the actual implementation in `app/ap
 
 27. Using `Skeleton()` component from ShadCN UI library to display skeletons of same dimensions as message card, until the suggestions get loaded in the page, which is especially useful for improving user experience and engagement. Inspired from the YouTube platform's videos loading skeletons, which are displayed until the videos get loaded in the page. For better understanding, you can check out the actual implementation in `src/app/u/[username]/page.tsx` file.
 
+28. The `asChild` attribute of `<Button>` component of ShadCN UI library makes it's child component (like `<Link>` of `next/link`) inherit all it's styles, classes & attributes, to make it's child component look like the `<Button>` component, without losing the functionality of the child component. For better understanding, you can check out the actual implementation in `src/components/Navbar.tsx` file.
+
+29. To get the path name of the current page in the client-side of Next.js application, we can use `usePathname()` hook from "next/navigation" library, which returns the path name of the current page as string, like `"/u/vinaynoogler000"`. For better understanding, you can check out the actual implementation in `src/components/Navbar.tsx` file.
+
+
+
 
 ## To-Do:
 
