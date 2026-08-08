@@ -50,7 +50,7 @@ export async function POST(request: Request): Promise<Response> {
             });
         }
 
-        const verifyEmailResponse: ApiResponse = await sendVerificationEmail(email, username, verificationCode);
+        const verifyEmailResponse: ApiResponse = await sendVerificationEmail(email, username, verificationCode, new URL(request.url).origin);
         if (!verifyEmailResponse.success) {
             return Response.json({ success: false, message: verifyEmailResponse.message }, { status: 500 });
         }

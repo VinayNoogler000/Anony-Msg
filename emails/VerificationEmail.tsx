@@ -5,9 +5,12 @@ import { Html, Head, Font, Preview, Heading, Row, Section, Text, Button } from "
 interface VerificationEmailProps {
   username: string;
   otp: string;
+  verificationLink: string;
 }
 
-export default function VerificationEmail({ username, otp }: VerificationEmailProps) {
+export default function VerificationEmail({ username, otp, verificationLink }: VerificationEmailProps) {
+  verificationLink = `${verificationLink}/verify/${username}`;
+
   return (
     <Html lang="en" dir="ltr">
       <Head>
@@ -44,14 +47,14 @@ export default function VerificationEmail({ username, otp }: VerificationEmailPr
             If you did not request this code, please ignore this email.
           </Text>
         </Row>
-        {/* <Row>
+        <Row>
           <Button
-            href={`http://localhost:3000/verify/${username}`}
+            href={verificationLink}
             style={{ color: '#61dafb' }}
           >
             Verify here
           </Button>
-        </Row> */}
+        </Row>
       </Section>
     </Html>
   );
