@@ -11,7 +11,6 @@ export async function proxy(request: NextRequest) {
     // Redirect to dashboard if the user is already authenticated/
     // signed-in and trying to access sign-in, sign-up, verify, or home page
     if (token && (
-        url.pathname === '/' ||
         url.pathname.startsWith("/sign-in") || 
         url.pathname.startsWith("/sign-up") ||
         url.pathname.startsWith("/verify")
