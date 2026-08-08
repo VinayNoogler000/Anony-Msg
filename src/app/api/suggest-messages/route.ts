@@ -85,7 +85,7 @@ export async function POST() {
             else {
                 // General error handling
                 console.error('An unexpected error occurred:', error);
-                throw error;
+                // throw error;
             }
         }
     }
