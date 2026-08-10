@@ -111,7 +111,7 @@ function Page() {
     // If User has Stopped the Suggestion Process by itself. 
     if (wasStopped) {
       return <>
-        <p> Message Suggestions Stopped by You. </p>
+        <p> Message Suggestions Stopped </p>
 
         {initialSuggestions.split(specialChar).map((msg, idx) => (
           <Button key={idx} variant="outline" className="mb-2" onClick={() => setValue("content", msg)} >
