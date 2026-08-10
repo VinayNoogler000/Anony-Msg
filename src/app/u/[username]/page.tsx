@@ -35,15 +35,19 @@ function Page() {
   const { complete, completion, isLoading: isSuggestionsLoading, stop, error } = useCompletion({
     api: '/api/suggest-messages/',
     streamProtocol: "text",
-    onFinish: () => {
-      if (!(error instanceof Error)) {
-        toast.success("Message Suggestions Completed", { dismissible: true });
+    onFinish: (prompt, completion) => {
+      if (!completion.trim()) {
+        toast.dismiss();
+        toast.error("Suggestion failed due to token limit. Please try again.");
       }
     },
-    onError: (error) => toast.error("An Error Occurred", { description: parseJsonErrorMessage(error), dismissible: true }),
+    onError: (error) => {
+      toast.dismiss();
+      toast.error("An Error Occurred", { description: parseJsonErrorMessage(error), dismissible: true });
+    },
     initialCompletion: initialSuggestions
   });
-  const [wasStopped, setWasStopped] = useState<boolean>(false);
+  const [wasStopped, setWasStopped] = useState<boolean>(false); // Only by User
 
   const { watch, setValue, handleSubmit, control, reset } = useForm<z.infer<typeof msgSchema>>({
     resolver: zodResolver(msgSchema),
@@ -73,7 +77,7 @@ function Page() {
   }
 
   const fetchMsgSuggestions = async () => {
-    setWasStopped(true);
+    setWasStopped(false);
 
     try {
       await complete('');
