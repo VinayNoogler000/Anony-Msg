@@ -8,7 +8,7 @@ export function getStatusCode(error: unknown): number {
             console.error("Unathorize | API Key Invalid Error [api/suggest-messages/route.ts]")
             return 500;
         }
-        if (message.includes('rate limit') || message.includes('too many requests')) { 
+        if (message.includes('rate limit') || message.includes('too many requests')) {
             console.error("Rate Limit Error [api/suggest-messages/route.ts]");
             return 500;
         }
@@ -18,7 +18,7 @@ export function getStatusCode(error: unknown): number {
             return 400;
         }
     }
-    
+
     if (APICallError.isInstance(error)) {
         console.error("AI-API Call Error [api/suggest-messages/route.ts]");
         return typeof error.statusCode === 'number' ? error.statusCode : 501;
@@ -38,7 +38,7 @@ export function getStatusCode(error: unknown): number {
         console.error("AI-API Provider ID Not Found Error [api/suggest-messages/route.ts]");
         return 501;
     }
-    
+
     if (NoSuchModelError.isInstance(error)) {
         console.error("AI-API Model ID Not Found Error [api/suggest-messages/route.ts]");
         return 501;
@@ -47,14 +47,19 @@ export function getStatusCode(error: unknown): number {
     return 500;
 }
 
-export function getErrorMessage(error: Error | any): string {
-    if (error.message.includes("Not Authenticated")) {
+export function getErrorMessage(error: unknown): string {
+    const message = error instanceof Error
+        ? error.message
+        : typeof error === "object" && error !== null && "message" in error && typeof error.message === "string"
+            ? error.message : "";
+
+    if (message.includes("Not Authenticated")) {
         return "Not Authenticated. Please Login!";
     }
 
-    if ( error.message.includes("No output generated. Check the stream for errors") ) {
+    if (message.includes("No output generated. Check the stream for errors")) {
         return "Unable to Suggest Messages due to AI Model's rate-limiting or high server-load. Please try again later!";
     }
 
-    return error instanceof Error ? error.message : "Something went wrong. Please try again later";
+    return message || "Something went wrong. Please try again later";
 }
