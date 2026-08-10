@@ -1,4 +1,3 @@
-import errorsToRecord from "@hookform/resolvers/io-ts/dist/errorsToRecord.js";
 import { APICallError, NoSuchModelError, NoSuchProviderError, NoSuchProviderReferenceError, RetryError } from "ai";
 
 export function getStatusCode(error: unknown): number {
