@@ -1,14 +1,31 @@
-import { streamText, createTextStreamResponse, AISDKError } from 'ai';
+import { streamText, createTextStreamResponse, AISDKError} from 'ai';
 import { createOpenRouter } from '@openrouter/ai-sdk-provider';
 import { NextResponse } from 'next/server';
 import { getErrorMessage, getStatusCode } from '@/helpers/error';
 import { getServerSession, User } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/options';
 
-export async function POST() {
+/* Route behavior:
+ * 1. Authenticate the user.
+ * 2. Send the request to the primary OpenRouter model.
+ * 3. Provide OpenRouter with an ordered list of fallback models.
+ * 4. OpenRouter automatically selects a fallback model if the primary
+ *    model is unavailable or fails before streaming begins.
+ * 5. Pass the client's abort signal to the AI SDK so clicking Stop
+ *    can cancel the active model request.
+ * 6. Stream the generated text to the client in real time.
+ * 7. Return a JSON error response only if the request fails before
+ *    the stream response is created.
+ *
+ * Once streaming has started, the HTTP response status is already 200.
+ * A later streaming failure cannot be converted into a different HTTP
+ * status or replaced cleanly with another model's response.
+ */
+
+export async function POST(request: Request) {
     const session = await getServerSession(authOptions);
     const loggedInUser = session?.user as User;
-        
+
     if (!session || !loggedInUser) {
         return Response.json({
             success: false,
@@ -23,72 +40,53 @@ export async function POST() {
         appName: "AnonyMsg"
     });
 
-    const models:string[] = [
-        'cohere/north-mini-code:free',
-        'poolside/laguna-xs-2.1:free',
-        'poolside/laguna-s-2.1:free',
-        'google/gemma-4-26b-a4b-it:free',
-        'inclusionai/ling-3.0-tiny:free',
-        "openai/gpt-oss-20b:free",
-        'google/gemma-4-31b-it:free',
-    ]
-    
-    let maxOutputTokens = 400;
-    let err:Error | any = null;
+    let err: unknown = null;
 
-    for (const model of models) {
-        try {
-            const result = streamText({
-                model: openrouter(model),
+    try {
+        const result = streamText({
+                model: openrouter('cohere/north-mini-code:free'),
                 prompt,
-                onError({error}) {
+                onError({ error }) {
                     err = error as Error;
-                    console.log(`----Streaming Error [${model}]: `, err.message, "----");
+                    console.error(`----Streaming Error: `, getErrorMessage(err), "----");
                 },
-                maxOutputTokens,
+                maxOutputTokens: 400,
                 maxRetries: 0,
-            });
-            
+                timeout: {
+                    totalMs: 30_000,
+                    chunkMs: 5_000,
+                },
+                abortSignal: request.signal,
+                providerOptions: {
+                    openrouter: {
+                        models: [
+                            'poolside/laguna-xs-2.1:free',
+                            'google/gemma-4-26b-a4b-it:free',
+                            'inclusionai/ling-3.0-tiny:free',
+                            // 'cohere/north-mini-code:free',
+                            // "openai/gpt-oss-20b:free",
+                            // 'google/gemma-4-31b-it:free',
+                        ]
+                    }
+                }
+        });
 
-            // Read the first chunk to ensure the stream connection is healthy
-            const reader = result.textStream.getReader();
-            const { value, done } = await reader.read();
+        return createTextStreamResponse({
+            status: 200,
+            stream: result.textStream,
+        });
+    }
+    catch (error) {
+        err = error;
 
-            // Release the reader lock so the stream can continue consuming
-            reader.releaseLock();
-
-            // If we successfully received the first chunk (or empty completed stream), return it
-            if (!done || value) {
-                return createTextStreamResponse({
-                    status: 200,
-                    stream: result.textStream,
-                });
-            }
-            
-            console.warn(`Model ${model} hit token limit (finishReason: length). Trying next model...`);
-            
-            // Doubles the Output Token Limit if the streaming failed due to lower limit of output token
-            const finishReason = await result.finishReason; 
-            if (finishReason === "length") {
-                maxOutputTokens *= 2;
-                console.log("Max Output Tokens increased to", maxOutputTokens);
-            }
+        // Catches AI_RetryError, AI_APICallError, Rate Limit, or Upstream Errors
+        if (AISDKError.isInstance(error)) {
+            console.error(`Model failed with error:`, error);
         }
-        catch (error) {
-            err = error;
-
-            // Catches AI_RetryError, AI_APICallError, Rate Limit, or Upstream Errors
-            if (AISDKError.isInstance(error)) {
-                console.error(`[${model}] failed with error:`, error);
-                // return NextResponse.json({ success: false, message: getErrorMessage(error) }, { status: getStatusCode(error) });
-            }
-            else {
-                // General error handling
-                console.error('An unexpected error occurred:', error);
-                // throw error;
-            }
+        else { // General error handling
+            console.error('An unexpected error occurred:', error);
         }
     }
-    
+
     return NextResponse.json({ success: false, message: getErrorMessage(err) }, { status: getStatusCode(err) });
 }
