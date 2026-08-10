@@ -27,52 +27,6 @@ const specialChar = "||"; // character used as as dividor between messages in AI
 
 const initialSuggestions: string = "What's your favorite movie?||Do you have any pets?||What's your dream job?";
 
-const renderSuggestions = (
-  isSuggestionsLoading: boolean,
-  error: Error | any,
-  suggestions: string[],
-  onSuggestionClick: (message: string) => void
-) => {
-
-  if (isSuggestionsLoading) {
-    return (
-      <>
-        <Skeleton className="h-9 w-full rounded-md" />
-        <Skeleton className="h-9 w-full rounded-md" />
-        <Skeleton className="h-9 w-full rounded-md" />
-      </>
-    );
-  }
-
-  if (!isSuggestionsLoading && error) {
-    return (
-      <p className="text-red-500">
-        {parseJsonErrorMessage(error)}
-      </p>
-    );
-  }
-
-  if (!isSuggestionsLoading && !error && !suggestions[0]) {
-    return <>
-      <p> Message Suggestions Stopped by You. </p>
-
-      {initialSuggestions.split(specialChar).map((msg, idx) => (
-        <Button key={idx} variant="outline" className="mb-2" onClick={() => onSuggestionClick(msg)} >
-          {msg}
-        </Button>
-      ))}
-    </>
-  }
-
-  return (<>
-    {suggestions.map((msg, idx) => (
-      <Button key={idx} variant="outline" className="mb-2" onClick={() => onSuggestionClick(msg)} >
-        {msg}
-      </Button>
-    ))}
-  </>);
-};
-
 function Page() {
   const { username } = useParams<{ username: string }>();
   const router = useRouter();
@@ -89,6 +43,7 @@ function Page() {
     onError: (error) => toast.error("An Error Occurred", { description: parseJsonErrorMessage(error), dismissible: true }),
     initialCompletion: initialSuggestions
   });
+  const [wasStopped, setWasStopped] = useState<boolean>(false);
 
   const { watch, setValue, handleSubmit, control, reset } = useForm<z.infer<typeof msgSchema>>({
     resolver: zodResolver(msgSchema),
@@ -118,8 +73,10 @@ function Page() {
   }
 
   const fetchMsgSuggestions = async () => {
+    setWasStopped(true);
+
     try {
-      complete('');
+      await complete('');
     }
     catch (error) {
       console.error('Error fetching messages:', error);
@@ -127,7 +84,52 @@ function Page() {
     }
   }
 
-  const suggestions = completion.split(specialChar);
+  const handleStopSuggestions = () => {
+    stop();
+    setWasStopped(true);
+  };
+
+  const renderSuggestions = () => {
+    const suggestions = completion.split(specialChar);
+
+    // If Error while Streaming Tokens
+    if (error && !isSuggestionsLoading) {
+      return <p className="text-red-500"> {parseJsonErrorMessage(error)} </p>
+    }
+
+    // If User has Requested to Give Message Suggestions, but Streaming Token (Msgs) hasn't Started
+    if (isSuggestionsLoading && !completion ) {
+      return (
+        <>
+          <Skeleton className="h-9 w-full rounded-md" />
+          <Skeleton className="h-9 w-full rounded-md" />
+          <Skeleton className="h-9 w-full rounded-md" />
+        </>
+      );
+    }
+
+    // If User has Stopped the Suggestion Process by itself. 
+    if (wasStopped) {
+      return <>
+        <p> Message Suggestions Stopped by You. </p>
+
+        {initialSuggestions.split(specialChar).map((msg, idx) => (
+          <Button key={idx} variant="outline" className="mb-2" onClick={() => setValue("content", msg)} >
+            {msg}
+          </Button>
+        ))}
+      </>
+    }
+
+    // If Streaming of Message Suggestions has started
+    return (<>
+      {suggestions.map((msg, idx) => (
+        <Button key={idx} variant="outline" className="mb-2" onClick={() => setValue("content", msg)} >
+          {msg}
+        </Button>
+      ))}
+    </>);
+};
 
   useEffect(() => {
     if (!error) {
@@ -185,7 +187,7 @@ function Page() {
               Suggest Messages
             </Button>
 
-            <Button type="button" disabled={!isSuggestionsLoading} aria-disabled={!isSuggestionsLoading} onClick={stop}>
+            <Button type="button" disabled={!isSuggestionsLoading} aria-disabled={!isSuggestionsLoading} onClick={handleStopSuggestions}>
               Stop
             </Button>
           </div>
@@ -200,8 +202,7 @@ function Page() {
           </CardHeader>
 
           <CardContent className="flex flex-col space-y-4">
-            {renderSuggestions(isSuggestionsLoading, error, suggestions, (message) => setValue("content", message)
-            )}
+            {renderSuggestions()}
           </CardContent>
         </Card>
 
