@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner"
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({subsets:['latin']});
 
@@ -42,6 +43,8 @@ export default function RootLayout({
 
           <p>© 2026 <Link href={'/'}>AnonyMsg</Link>. All rights reserved.</p>
         </footer>
+
+        <Analytics/>
       </body>
     </html>
   );
