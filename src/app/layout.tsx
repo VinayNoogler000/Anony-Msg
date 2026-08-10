@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({subsets:['latin']});
 
@@ -45,6 +46,7 @@ export default function RootLayout({
         </footer>
 
         <Analytics/>
+        <SpeedInsights/>
       </body>
     </html>
   );
