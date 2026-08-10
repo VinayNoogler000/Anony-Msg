@@ -4,10 +4,10 @@ import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 
 interface msgIdPathParam {
-    params: { messageId: string }
+    params: Promise<{ messageId: string }>
 }
 
-export async function DELETE(req: Request, {params}:msgIdPathParam) {
+export async function DELETE(req: Request, {params}:msgIdPathParam): Promise<Response> {
     const { messageId } = await params;
     await dbConnect();
 
