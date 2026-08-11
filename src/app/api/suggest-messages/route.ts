@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 import { getErrorMessage, getStatusCode } from '@/helpers/error';
 import { getServerSession, User } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/options';
+import { requireEnv, requireEnvArray } from '@/helpers/getEnvVar';
 
 /* Route behavior:
  * 1. Authenticate the user.
@@ -33,42 +34,33 @@ export async function POST(request: Request) {
         }, { status: 401 });
     }
 
-    const prompt = "Create a list of three open-ended and engaging questions formatted as a single string. Each question should be separated by '||'. These questions are for an anonymous social messaging platform, like Qooh.me, and should be suitable for a diverse audience. Avoid personal or sensitive topics, focusing instead on universal themes that encourage friendly interaction. For example, your output should be structured like this: 'What’s a hobby you’ve recently started?||If you could have dinner with any historical figure, who would it be?||What’s a simple thing that makes you happy?'. Without any quotation marks, whether single or double quotes. Ensure the questions are intriguing, foster curiosity, and contribute to a positive and welcoming conversational environment.";
-
-    const openrouter = createOpenRouter({
-        apiKey: process.env.AI_API_KEY,
-        appName: "AnonyMsg"
-    });
-
     let err: unknown = null;
 
     try {
+        const openrouter = createOpenRouter({
+            apiKey: requireEnv("AI_API_KEY"),
+            appName: "AnonyMsg"
+        });
+
         const result = streamText({
-                model: openrouter('cohere/north-mini-code:free'),
-                prompt,
-                onError({ error }) {
-                    err = error as Error;
-                    console.error(`----Streaming Error: `, getErrorMessage(err), "----");
-                },
-                maxOutputTokens: 400,
-                maxRetries: 0,
-                timeout: {
-                    totalMs: 30_000,
-                    chunkMs: 5_000,
-                },
-                abortSignal: request.signal,
-                providerOptions: {
-                    openrouter: {
-                        models: [
-                            'poolside/laguna-xs-2.1:free',
-                            'google/gemma-4-26b-a4b-it:free',
-                            'inclusionai/ling-3.0-tiny:free',
-                            // 'cohere/north-mini-code:free',
-                            // "openai/gpt-oss-20b:free",
-                            // 'google/gemma-4-31b-it:free',
-                        ]
-                    }
+            model: openrouter(requireEnv("PRIMARY_LLM")),
+            prompt: requireEnv("PROMPT"),
+            onError({ error }) {
+                err = error as Error;
+                console.error(`----Streaming Error: `, getErrorMessage(err), "----");
+            },
+            maxOutputTokens: 400,
+            maxRetries: 0,
+            timeout: {
+                totalMs: 30_000,
+                chunkMs: 5_000,
+            },
+            abortSignal: request.signal,
+            providerOptions: {
+                openrouter: {
+                    models: requireEnvArray("FALLBACK_LLMs")
                 }
+            }
         });
 
         return createTextStreamResponse({
