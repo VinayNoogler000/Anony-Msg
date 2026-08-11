@@ -1,6 +1,6 @@
 import { APICallError, NoSuchModelError, NoSuchProviderError, NoSuchProviderReferenceError, RetryError } from "ai";
 
-export function getStatusCode(error: unknown): number {
+export function getStatusCode(error?: unknown): number {
     if (error instanceof Error) {
         const message = error.message.toLowerCase();
 
@@ -47,7 +47,7 @@ export function getStatusCode(error: unknown): number {
     return 500;
 }
 
-export function getErrorMessage(error: unknown): string {
+export function getErrorMessage(error?: unknown): string {
     const message = error instanceof Error
         ? error.message
         : typeof error === "object" && error !== null && "message" in error && typeof error.message === "string"
