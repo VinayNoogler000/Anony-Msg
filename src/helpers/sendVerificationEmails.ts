@@ -1,4 +1,4 @@
-import VerificationEmail from "../../emails/VerificationEmail";
+import EmailTemplate from "../components/VerificationEmailTemplate";
 import { resendAPI } from "@/lib/resendAPI";
 import type ApiResponse from "@/types/ApiResponse";
 
@@ -8,7 +8,7 @@ export async function sendVerificationEmail(email: string, username: string, ver
             from: 'AnonyMsg <verify@mail.vinaytambey.tech>',
             to: [email],
             subject: 'AnonyMsg | Verification Code',
-            react: VerificationEmail({ username, otp: verificationCode, verificationLink }),
+            react: EmailTemplate({ username, otp: verificationCode, verificationLink }),
         });
 
         if (error) return { success: false, message: "Failed to Send Verification Email"};
