@@ -90,3 +90,6 @@ For better understanding, you can check out the actual implementation in `app/ap
 1. ✅ Use ShadCN's Skeleton Component in the Profile Page's Message Suggestions section, to display three skeletons of same dimensions as message card, until the suggestions get loaded in the page **(COMPLETED)**
 
 2. ✅ Test "Sending Verification Emails" functionality by using different user emails, instead of using the same email of `Resend.js` account, to make the application production-ready, and usable for real users. **(COMPLETED)**
+
+3. Fix the UI of "send message button" while loading when sending message.
+
