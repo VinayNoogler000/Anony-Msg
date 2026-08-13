@@ -9,7 +9,7 @@ interface VerificationEmailProps {
   verificationLink: string;
 }
 
-export default function VerificationEmail({ username, otp, verificationLink }: VerificationEmailProps) {
+export default function VerificationEmailTemplate({ username, otp, verificationLink }: VerificationEmailProps) {
   verificationLink = `${verificationLink}/verify/${username}?ref=email`;
 
   return (
