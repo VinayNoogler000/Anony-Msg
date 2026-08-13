@@ -104,7 +104,7 @@ function SignUpPage() {
                     onChange={(e) => {
                       field.onChange(e);
                       debounced(e.target.value)
-                    }} placeholder="For ex: 'jd007'" autoComplete="true"/>
+                    }} placeholder="For ex: 'jd007'" autoComplete="username" />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
@@ -127,7 +127,7 @@ function SignUpPage() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} orientation={"responsive"}>
                   <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="For ex:  'johndoe@gmail.com'" autoComplete="true" />
+                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="For ex:  'johndoe@gmail.com'" type="email" autoComplete="email" />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
@@ -138,7 +138,7 @@ function SignUpPage() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} orientation={"responsive"}>
                   <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="For ex:  'as0f94Gjf0(*f)_A'"/>
+                  <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="For ex:  'as0f94Gjf0(*f)_A'" type="password" autoComplete="new-password" />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}

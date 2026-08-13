@@ -82,7 +82,9 @@ For better understanding, you can check out the actual implementation in `app/ap
 
 29. To get the path name of the current page in the client-side of Next.js application, we can use `usePathname()` hook from "next/navigation" library, which returns the path name of the current page as string, like `"/u/vinaynoogler000"`. For better understanding, you can check out the actual implementation in `src/components/Navbar.tsx` file.
 
+30. **Enhanced UX via Native Credential Autofill & Password Managers:** Learned how to structure semantic HTML forms by pairing `<form>` containers with precise `autoComplete` attributes (`username`, `current-password`, `new-password`, `email`) and native submit events. This ensures Chrome and external password managers reliably prompt users to save credentials, reducing login friction and boosting conversion rates or application usage.
 
+31. **Mobile-First Verification & OTP Optimization:** Discovered how to optimize authentication flows by utilizing `inputMode="numeric"` alongside `autoComplete="one-time-code"` on verification inputs. This delivers a seamless mobile experience by triggering a clean numeric keypad and enabling direct SMS/email OTP auto-reading without the layout bugs associated with traditional `type="number"` inputs.
 
 
 ## To-Do:
@@ -92,4 +94,10 @@ For better understanding, you can check out the actual implementation in `app/ap
 2. ✅ Test "Sending Verification Emails" functionality by using different user emails, instead of using the same email of `Resend.js` account, to make the application production-ready, and usable for real users. **(COMPLETED)**
 
 3. Fix the UI of "send message button" while loading when sending message.
+
+4. ✅ Credential Autofill & Security Integration:
+    - ✅ Implement semantic `<form> / <input>` elements and standard `autoComplete` attributes (`username`, `current-password`, `new-password`, `email`) across Sign-In and Sign-Up flows.
+    - ✅  Optimize OTP/verification input with `inputMode="numeric"` and `autoComplete="one-time-code"` for seamless mobile keyboard rendering and automatic code detection.
+
+5. Implement Sign-Up and Sign-In using Google functionality.
 

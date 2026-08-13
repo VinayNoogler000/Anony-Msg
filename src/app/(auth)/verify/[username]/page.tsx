@@ -58,7 +58,7 @@ function VerifyAccountPage() {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid} orientation={"responsive"}>
                 <FieldLabel htmlFor={field.name}>Verification Code</FieldLabel>
-                <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="Enter Code..." autoComplete="true">
+                <Input {...field} id={field.name} aria-invalid={fieldState.invalid} placeholder="Enter 6-Digit Code" type="text" inputMode="numeric" autoComplete="one-time-code" maxLength={6} pattern="[0-9]*">
                 </Input>
                 { fieldState.invalid && <FieldError errors={[fieldState.error]}/> }
               </Field>
