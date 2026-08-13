@@ -1,0 +1,5 @@
+Copyright (c) 2026 Vinay Tambey (AnonyMsg). All rights reserved.
+
+This codebase is publicly visible for educational and code-review purposes only. 
+No permission is granted to copy, modify, merge, publish, distribute, sublicense, 
+or sell copies of the software.

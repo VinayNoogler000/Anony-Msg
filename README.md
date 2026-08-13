@@ -95,9 +95,14 @@ For better understanding, you can check out the actual implementation in `app/ap
 
 3. Fix the UI of "send message button" while loading when sending message.
 
-4. ✅ Credential Autofill & Security Integration:
+4. ✅ Credential Autofill & Security Integration **(COMPLETED)**:
     - ✅ Implement semantic `<form> / <input>` elements and standard `autoComplete` attributes (`username`, `current-password`, `new-password`, `email`) across Sign-In and Sign-Up flows.
     - ✅  Optimize OTP/verification input with `inputMode="numeric"` and `autoComplete="one-time-code"` for seamless mobile keyboard rendering and automatic code detection.
 
-5. Implement Sign-Up and Sign-In using Google functionality.
+5. ✅ Add license to the project to define legal permissions and restrictions for using, modifying, and distributing the code, ensuring clarity and protection for both the author and users of the project.
 
+6. Implement Sign-Up and Sign-In using Google functionality.
+
+<br> <br>
+
+All rights reserved. For commercial inquiries or licensing permissions, contact [vinaytambey000@gmail.com](mailto:vinaytambey000@gmail.com).
