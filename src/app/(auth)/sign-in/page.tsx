@@ -4,6 +4,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field
 import { Input } from "@/components/ui/input";
 import { signInSchema } from "@/schemas/signInSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -91,7 +92,7 @@ function SingInPage() {
           </FieldGroup>
 
           <Button type="submit" disabled={isSubmitting} aria-disabled={isSubmitting} className="self-center">
-            Sign-In
+            { isSubmitting ? <> <Loader2 className="mr-2 h-4 w-4 animate-spin"/>  Signing in... </>  : "Sign In" }
           </Button>
         </form>
 

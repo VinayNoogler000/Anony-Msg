@@ -6,6 +6,7 @@ import { verifySchema } from '@/schemas/verifySchema';
 import ApiResponse from '@/types/ApiResponse';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
+import { Loader2 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -66,7 +67,10 @@ function VerifyAccountPage() {
           </Controller>
 
           <Button type="submit" disabled={isSubmitting} aria-disabled={isSubmitting}  className="self-center" >
-            Submit
+            { isSubmitting ? 
+              <> <Loader2 className="mr-2 h-4 w-4 animate-spin"/>  Submitting... </> : 
+              "Submit"
+            }
           </Button>
         </form>
       </div>

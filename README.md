@@ -93,7 +93,7 @@ For better understanding, you can check out the actual implementation in `app/ap
 
 2. ✅ Test "Sending Verification Emails" functionality by using different user emails, instead of using the same email of `Resend.js` account, to make the application production-ready, and usable for real users. **(COMPLETED)**
 
-3. Fix the UI of "send message button" while loading when sending message.
+3. ✅ Fix the UI of "send message button" while loading when sending message. Also, add industry standard loading states and visual feedback during process of sign-in, sign-up, verification, sending message, and message suggestion by adding spinners and changing button text, to enhance user experience and engagement. **(COMPLETED)**
 
 4. ✅ Credential Autofill & Security Integration **(COMPLETED)**:
     - ✅ Implement semantic `<form> / <input>` elements and standard `autoComplete` attributes (`username`, `current-password`, `new-password`, `email`) across Sign-In and Sign-Up flows.
@@ -102,6 +102,9 @@ For better understanding, you can check out the actual implementation in `app/ap
 5. ✅ Add license to the project to define legal permissions and restrictions for using, modifying, and distributing the code, ensuring clarity and protection for both the author and users of the project.
 
 6. Implement Sign-Up and Sign-In using Google functionality.
+
+
+
 
 <br> <br>
 

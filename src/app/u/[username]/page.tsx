@@ -171,12 +171,9 @@ function Page() {
         />
 
         <div className="flex justify-center">
-          <Button type="submit" disabled={isSending || !msgContent} aria-disabled={isSending || !msgContent} className={isSending ? "mr-2 h-4 w-4 animate-spin" : ''} >
+          <Button type="submit" disabled={isSending || !msgContent} aria-disabled={isSending || !msgContent} >
             {isSending ?
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Please Wait...!
-              </> :
+              <> <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending... </> :
               "Send It"
             }
           </Button>
@@ -188,7 +185,10 @@ function Page() {
         <div className="flex flex-col items-center">
           <div className="flex items-center gap-2">
             <Button onClick={fetchMsgSuggestions} className="my-4" disabled={isSuggestionsLoading} aria-disabled={isSuggestionsLoading} >
-              Suggest Messages
+              { isSuggestionsLoading ? 
+                <> <Loader2 className="mr-2 h-4 w-4 animate-spin"/>  Please wait... </>  : 
+                "Suggest Messages" 
+              }
             </Button>
 
             <Button type="button" disabled={!isSuggestionsLoading} aria-disabled={!isSuggestionsLoading} onClick={handleStopSuggestions}>

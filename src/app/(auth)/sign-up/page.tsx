@@ -110,10 +110,9 @@ function SignUpPage() {
               )}
             />
 
-            { isCheckingUsername && <> 
-              <Loader2 className="animate-spin" /> 
-              Checking Username Availability...  
-            </> }
+            { isCheckingUsername && 
+              <> <Loader2 className="mr-2 h-4 w-4 animate-spin"/> Checking username availability...  </> 
+            }
             
             { !isCheckingUsername && usernameMsg && (
               <p className={`text-sm ${usernameMsg === "Username is available!🎉" ? "text-green-500" : "text-red-500"}`}> 
@@ -146,9 +145,10 @@ function SignUpPage() {
           </FieldGroup>
 
           <Button type="submit" disabled={isSubmitting} aria-disabled={isSubmitting} className="self-center">
-              { isSubmitting ? (
-                  <> <Loader2 className="mr-2 h-4 w-4 animate-spin"/>  Please Wait...! </>
-                ) : "Signup" }
+              { isSubmitting ? 
+                <> <Loader2 className="mr-2 h-4 w-4 animate-spin"/>  Signing up... </> : 
+                "Sign Up" 
+              }
           </Button>
         </form>
 
