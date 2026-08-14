@@ -118,7 +118,7 @@ function page() {
       <div className="mb-4">
         <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>{' '}
         <div className="flex items-center">
-          <Link href={profileUrl} className="w-full p-2 mr-2 hover:underline">{profileUrl}</Link>
+          <Link href={profileUrl} className="w-full p-2 mr-2 underline md:no-underline md:hover:underline">{profileUrl}</Link>
           <Button onClick={copyToClipboard}>Copy</Button>
         </div>
       </div>
