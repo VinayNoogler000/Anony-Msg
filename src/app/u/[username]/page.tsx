@@ -108,9 +108,9 @@ function Page() {
     if (isSuggestionsLoading && !completion ) {
       return (
         <>
-          <Skeleton className="h-9 w-full rounded-md" />
-          <Skeleton className="h-9 w-full rounded-md" />
-          <Skeleton className="h-9 w-full rounded-md" />
+          <Skeleton className="h-11 w-full rounded-md" />
+          <Skeleton className="h-11 w-full rounded-md" />
+          <Skeleton className="h-11 w-full rounded-md" />
         </>
       );
     }
@@ -121,7 +121,7 @@ function Page() {
         <p> Message Suggestions Stopped </p>
 
         {initialSuggestions.split(specialChar).map((msg, idx) => (
-          <Button key={idx} variant="outline" className="mb-2" onClick={() => setValue("content", msg)} >
+          <Button key={idx} variant="outline" className="!text-wrap py-3 h-auto min-h-9" onClick={() => setValue("content", msg)} >
             {msg}
           </Button>
         ))}
@@ -131,7 +131,7 @@ function Page() {
     // If Streaming of Message Suggestions has started
     return (<>
       {suggestions.map((msg, idx) => (
-        <Button key={idx} variant="outline" className="mb-2" onClick={() => setValue("content", msg)} >
+        <Button key={idx} variant="outline" className="!text-wrap py-3 h-auto min-h-9" onClick={() => setValue("content", msg)} >
           {msg}
         </Button>
       ))}
