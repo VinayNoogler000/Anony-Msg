@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import { useCompletion } from '@ai-sdk/react';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2 } from 'lucide-react';
+import { Bot, Loader2, Sparkle, Sparkles, Wand2 } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { getErrorMessage } from '@/helpers/error';
@@ -186,8 +186,8 @@ function Page() {
           <div className="flex items-center gap-2">
             <Button onClick={fetchMsgSuggestions} className="my-4" disabled={isSuggestionsLoading} aria-disabled={isSuggestionsLoading} >
               { isSuggestionsLoading ? 
-                <> <Loader2 className="mr-2 h-4 w-4 animate-spin"/>  Please wait... </>  : 
-                "Suggest Messages" 
+                <> <Loader2 className="h-4 w-4 animate-spin"/>  Generating... </>  : 
+                <> <Sparkles className="h-4 w-4" /> Get Suggestions with AI </> 
               }
             </Button>
 
