@@ -49,7 +49,7 @@ export async function POST(request: Request) {
                 err = error as Error;
                 console.error(`----Streaming Error: `, getErrorMessage(err), "----");
             },
-            maxOutputTokens: 400,
+            maxOutputTokens: 500,
             maxRetries: 0,
             timeout: {
                 totalMs: 30_000,

@@ -40,7 +40,6 @@ function Page() {
       if (!completion.trim()) {
         toast.dismiss();
         toast.error("An Error Occurred", {description: "Suggestion failed due to token limit. Please try again.", dismissible: true});
-        console.error("Token Limit Err");
         setIsTokenLimitError(true);
       }
     },
@@ -92,8 +91,8 @@ function Page() {
   }
 
   const handleStopSuggestions = () => {
-    stop();
     setWasStopped(true);
+    stop();
   };
 
   const renderSuggestions = () => {
