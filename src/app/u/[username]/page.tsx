@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import { useCompletion } from '@ai-sdk/react';
 import { Textarea } from '@/components/ui/textarea';
-import { Bot, Loader2, Sparkle, Sparkles, Wand2 } from 'lucide-react';
+import { Loader2, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { getErrorMessage } from '@/helpers/error';
@@ -31,14 +31,17 @@ function Page() {
   const { username } = useParams<{ username: string }>();
   const router = useRouter();
   const [isSending, setIsSending] = useState<boolean>(false);
-  
+
+  const [isTokenLimitError, setIsTokenLimitError] = useState<boolean>(false);
   const { complete, completion, isLoading: isSuggestionsLoading, stop, error } = useCompletion({
     api: '/api/suggest-messages/',
     streamProtocol: "text",
     onFinish: (prompt, completion) => {
       if (!completion.trim()) {
         toast.dismiss();
-        toast.error("Suggestion failed due to token limit. Please try again.");
+        toast.error("An Error Occurred", {description: "Suggestion failed due to token limit. Please try again.", dismissible: true});
+        console.error("Token Limit Err");
+        setIsTokenLimitError(true);
       }
     },
     onError: (error) => {
@@ -94,7 +97,7 @@ function Page() {
   };
 
   const renderSuggestions = () => {
-    const suggestions = completion.split(specialChar);
+    const suggestions = isTokenLimitError ? initialSuggestions.split(specialChar) : completion.split(specialChar);
 
     // If Error while Streaming Tokens
     if (error && !isSuggestionsLoading) {
@@ -198,7 +201,6 @@ function Page() {
 
           <p>Click on any message below to select it.</p>
         </div>
-
 
         <Card>
           <CardHeader>
