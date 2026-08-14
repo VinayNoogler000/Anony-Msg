@@ -4,11 +4,35 @@ import { useSession, signOut } from 'next-auth/react'
 import { User } from 'next-auth'
 import { Button } from './ui/button'
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 function Navbar() {
+  const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
   const { data: session, status } = useSession();
   const user = session?.user as User;
   const pathName = usePathname();
+
+  useEffect( () => {
+    if (status === "unauthenticated") {
+      setIsLoggingOut(false);
+    }
+  }, [status]);
+
+  const handleLogout = async () => {
+    if (isLoggingOut) return; // to prevent executing of "logout handler" multiple times at once, due to events like double-click, or tap spam.
+
+    setIsLoggingOut(true);
+
+    try {
+      await signOut();
+    }
+    catch {
+      setIsLoggingOut(false);
+      toast.error("An Error occured", {description: "Failed to Logout User.", dismissible: true});
+    }
+  }
 
   return (
     <nav className="p-4 md:p-6 shadow-md bg-gray-900 text-white">
@@ -26,7 +50,10 @@ function Navbar() {
                   </Button>
                 }
 
-                <Button className="w-fit md:w-auto bg-slate-100 text-black" onClick={() => signOut()}> Logout </Button>
+                <Button className="w-fit md:w-auto bg-slate-100 text-black" disabled={isLoggingOut} aria-disabled={isLoggingOut} onClick={handleLogout}> 
+                  { isLoggingOut ? 
+                    <> <Loader2 className="h-4 w-4 animate-spin" /> Logging out... </> : "Logout" 
+                  } </Button>
               </div>
             </>
           ) :

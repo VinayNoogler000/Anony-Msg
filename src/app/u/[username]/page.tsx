@@ -130,7 +130,7 @@ function Page() {
     // If Streaming of Message Suggestions has started
     return (<>
       {suggestions.map((msg, idx) => (
-        <Button key={idx} variant="outline" className="!text-wrap py-3 h-auto min-h-9" onClick={() => setValue("content", msg)} >
+        <Button key={idx} variant="outline" className="text-wrap! py-3 h-auto min-h-9" onClick={() => setValue("content", msg)} >
           {msg}
         </Button>
       ))}

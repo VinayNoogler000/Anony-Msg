@@ -95,13 +95,21 @@ For better understanding, you can check out the actual implementation in `app/ap
 
 3. ✅ Fix the UI of "send message button" while loading when sending message. Also, add industry standard loading states and visual feedback during process of sign-in, sign-up, verification, sending message, and message suggestion by adding spinners and changing button text, to enhance user experience and engagement. **(COMPLETED)**
 
-4. ✅ Credential Autofill & Security Integration **(COMPLETED)**:
-    - ✅ Implement semantic `<form> / <input>` elements and standard `autoComplete` attributes (`username`, `current-password`, `new-password`, `email`) across Sign-In and Sign-Up flows.
-    - ✅  Optimize OTP/verification input with `inputMode="numeric"` and `autoComplete="one-time-code"` for seamless mobile keyboard rendering and automatic code detection.
+4. ✅ Credential Autofill & Security Integration **(COMPLETED)**:  
+    - Implement semantic `<form> / <input>` elements and standard `autoComplete` attributes (`username`, `current-password`, `new-password`, `email`) across Sign-In and Sign-Up flows.  
+    - Optimize OTP/verification input with `inputMode="numeric"` and `autoComplete="one-time-code"` for seamless mobile keyboard rendering and automatic code detection.
 
 5. ✅ Add license to the project to define legal permissions and restrictions for using, modifying, and distributing the code, ensuring clarity and protection for both the author and users of the project.
 
-6. Implement Sign-Up and Sign-In using Google functionality.
+6. ✅ Rebrand the "Suggest Message" btn to "AI Suggestions" btn with AI logo and different text while loading **(COMPLETED)**
+
+7. ✅ Fix the container size, which is containing a single message suggestion to automatically change the height and wrap the text content (msg) so that the msg doesn't overflow out of the container, and stays within the container. **(COMPLETED)**
+
+8. ✅ Add a loader & change text content of the logout buttons when clicked on it and logging out started  **(COMPLETED)**
+
+9. ✅ Add the underline to the profile link in the dashboard for screen sizes <= 768px, to make the users understand that the link is a clickable link. **(COMPLETED)**
+
+10. ✅ Display initial suggestions when the suggestions fail to load due to the token limit. **(COMPLETED)**
 
 
 
